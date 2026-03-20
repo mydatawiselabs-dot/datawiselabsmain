@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DataWise Labs — Engineering Intelligence from Data</title>
+<meta name="description" content="DataWise Labs helps organizations build data systems, dashboards, and analytics solutions that drive better decisions." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* ── RESET & TOKENS ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:        #0B1629;
+    --ink-2:      #1D2E4F;
+    --mid:        #4A5E80;
+    --subtle:     #8596B0;
+    --line:       #D8E0EB;
+    --bg:         #F5F7FA;
+    --white:      #FFFFFF;
+    --gold:       #C4A96B;
+    --gold-light: #EFE4C8;
+    --accent:     #1A4FA0;
+    --accent-sat: #1659C8;
+    --sans:       'DM Sans', sans-serif;
+    --serif:      'Cormorant Garamond', serif;
+    --r:          6px;
+    --max:        1200px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    font-size: 16px;
+    color: var(--ink);
+    background: var(--white);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  ul { list-style: none; }
+  img { display: block; max-width: 100%; }
+
+  /* ── UTILITY ── */
+  .container { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 40px; }
+  @media(max-width:600px){ .container{ padding:0 20px; } }
+
+  .tag {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  .serif-heading {
+    font-family: var(--serif);
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+
+  .section { padding: 100px 0; }
+  .section-alt { background: var(--bg); }
+  .section-dark { background: var(--ink); color: var(--white); }
+
+  .divider {
+    width: 48px; height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    margin-bottom: 32px;
+    border-radius: 2px;
+  }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: var(--r);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    cursor: pointer;
+    transition: all .2s ease;
+    border: none;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--white);
+  }
+  .btn-primary:hover { background: var(--accent-sat); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,79,160,.25); }
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+    border: 1.5px solid rgba(255,255,255,.4);
+  }
+  .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,.08); }
+  .btn-outline-dark {
+    background: transparent;
+    color: var(--accent);
+    border: 1.5px solid var(--accent);
+  }
+  .btn-outline-dark:hover { background: var(--accent); color: var(--white); }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(11,22,41,.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 70px;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-logo-mark {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), var(--gold));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-logo-mark svg { width:18px; height:18px; fill:none; stroke:#fff; stroke-width:2.2; }
+  .nav-brand {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: .01em;
+  }
+  .nav-links {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-links a {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: rgba(255,255,255,.7);
+    padding: 8px 14px;
+    border-radius: var(--r);
+    transition: all .15s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--white); background: rgba(255,255,255,.07); }
+  .nav-cta {
+    padding: 9px 20px !important;
+    background: var(--accent) !important;
+    color: var(--white) !important;
+    border-radius: var(--r) !important;
+  }
+  .nav-cta:hover { background: var(--accent-sat) !important; }
+
+  .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:8px; }
+  .hamburger span { display:block; width:22px; height:2px; background:rgba(255,255,255,.8); border-radius:2px; transition:.2s; }
+
+  @media(max-width:768px){
+    .nav-links { display:none; flex-direction:column; position:absolute; top:70px; left:0; right:0; background:rgba(11,22,41,.98); padding:16px 20px; gap:4px; }
+    .nav-links.open { display:flex; }
+    .hamburger { display:flex; }
+  }
+
+  /* ── HERO ── */
+  #home {
+    min-height: 100vh;
+    background: var(--ink);
+    position: relative;
+    overflow: hidden;
+    display: flex; align-items: center;
+    padding-top: 70px;
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+  }
+  .hero-glow {
+    position: absolute;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(26,79,160,.3) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%,-55%);
+    pointer-events: none;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    max-width: 820px;
+    padding: 80px 0;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 12px; font-weight: 600; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--gold);
+    padding: 7px 16px;
+    border: 1px solid rgba(196,169,107,.3);
+    border-radius: 100px;
+    margin-bottom: 32px;
+  }
+  .hero-eyebrow-dot { width:6px; height:6px; background:var(--gold); border-radius:50%; }
+  .hero-h1 {
+    font-family: var(--serif);
+    font-size: clamp(48px, 7vw, 88px);
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.05;
+    margin-bottom: 28px;
+    letter-spacing: -.01em;
+  }
+  .hero-h1 em { font-style: italic; color: var(--gold); }
+  .hero-sub {
+    font-size: 18px;
+    color: rgba(255,255,255,.65);
+    max-width: 560px;
+    line-height: 1.65;
+    margin-bottom: 48px;
+    font-weight: 300;
+  }
+  .hero-ctas { display:flex; gap:14px; flex-wrap:wrap; }
+  .hero-stats {
+    display: flex; gap: 48px; margin-top: 72px;
+    padding-top: 48px;
+    border-top: 1px solid rgba(255,255,255,.08);
+    flex-wrap: wrap;
+  }
+  .stat-val {
+    font-family: var(--serif);
+    font-size: 40px;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 13px;
+    color: rgba(255,255,255,.5);
+    margin-top: 6px;
+    font-weight: 400;
+  }
+
+  /* ── SERVICES OVERVIEW ── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 56px;
+  }
+  .service-card {
+    background: var(--white);
+    padding: 40px 36px;
+    transition: background .2s;
+  }
+  .service-card:hover { background: var(--bg); }
+  .service-icon {
+    width: 48px; height: 48px;
+    background: linear-gradient(135deg, rgba(26,79,160,.1), rgba(196,169,107,.1));
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+  }
+  .service-icon svg { width:22px; height:22px; }
+  .service-card h3 {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .service-card p { font-size: 14.5px; color: var(--mid); line-height: 1.65; }
+  .service-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 600;
+    color: var(--accent);
+    margin-top: 20px;
+    transition: gap .15s;
+  }
+  .service-card:hover .service-link { gap: 10px; }
+
+  /* ── WHY US ── */
+  .why-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  @media(max-width:768px){ .why-layout{ grid-template-columns:1fr; gap:48px; } }
+
+  .why-visual {
+    position: relative;
+    background: linear-gradient(135deg, var(--ink), var(--ink-2));
+    border-radius: 16px;
+    padding: 48px;
+    color: var(--white);
+    overflow: hidden;
+  }
+  .why-visual::before {
+    content:'';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .why-visual-content { position: relative; z-index: 1; }
+  .why-number {
+    font-family: var(--serif);
+    font-size: 96px;
+    font-weight: 700;
+    color: rgba(255,255,255,.06);
+    line-height: 1;
+    position: absolute; top: 20px; right: 32px;
+  }
+  .why-metric {
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .why-metric-val {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--gold);
+    min-width: 80px;
+  }
+  .why-metric-text { font-size: 14px; color: rgba(255,255,255,.7); line-height: 1.4; }
+
+  .why-points { display:flex; flex-direction:column; gap:28px; margin-top:40px; }
+  .why-point { display:flex; gap:20px; }
+  .why-point-num {
+    flex-shrink: 0;
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--gold);
+  }
+  .why-point h4 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+  .why-point p { font-size: 14.5px; color: var(--mid); line-height: 1.6; }
+
+  /* ── INDUSTRIES ── */
+  .industries-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-top: 56px;
+  }
+  @media(max-width:900px){ .industries-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media(max-width:500px){ .industries-grid{ grid-template-columns:1fr; } }
+
+  .industry-card {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 36px 28px;
+    background: var(--white);
+    transition: all .2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .industry-card::before {
+    content:'';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--gold));
+    opacity: 0;
+    transition: opacity .2s;
+  }
+  .industry-card:hover { border-color: var(--accent); box-shadow: 0 8px 32px rgba(26,79,160,.08); }
+  .industry-card:hover::before { opacity: 1; }
+  .industry-icon { font-size: 32px; margin-bottom: 16px; }
+  .industry-card h3 { font-family: var(--serif); font-size: 20px; font-weight: 600; margin-bottom: 10px; }
+  .industry-card p { font-size: 14px; color: var(--mid); line-height: 1.6; }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin-top: 56px;
+  }
+  .testimonial-card {
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 12px;
+    padding: 36px 32px;
+  }
+  .quote-mark {
+    font-family: var(--serif);
+    font-size: 64px;
+    color: var(--gold);
+    line-height: 0.5;
+    margin-bottom: 24px;
+  }
+  .testimonial-card blockquote {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(255,255,255,.85);
+    line-height: 1.65;
+    margin-bottom: 28px;
+    font-style: italic;
+  }
+  .testimonial-author { display:flex; align-items:center; gap:14px; }
+  .author-avatar {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--accent), var(--gold));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--white);
+  }
+  .author-name { font-size: 14px; font-weight: 600; color: var(--white); }
+  .author-role { font-size: 13px; color: rgba(255,255,255,.5); margin-top: 2px; }
+
+  /* ── CTA BAND ── */
+  .cta-band {
+    background: linear-gradient(135deg, var(--accent), #0E3A7A);
+    padding: 80px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-band::before {
+    content:'';
+    position:absolute;inset:0;
+    background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .cta-band .container { position:relative; z-index:1; }
+  .cta-band h2 {
+    font-family: var(--serif);
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+  .cta-band p { font-size: 17px; color: rgba(255,255,255,.7); max-width:520px; margin:0 auto 40px; }
+  .cta-band .btn-group { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+
+  /* ── ABOUT ── */
+  .about-story {
+    display: grid;
+    grid-template-columns: 5fr 4fr;
+    gap: 80px;
+    align-items: start;
+  }
+  @media(max-width:768px){ .about-story{ grid-template-columns:1fr; } }
+  .story-text p { font-size: 16px; color: var(--mid); line-height: 1.8; margin-bottom: 20px; }
+
+  .about-aside {
+    background: var(--ink);
+    border-radius: 16px;
+    padding: 40px 36px;
+    color: var(--white);
+    position: sticky;
+    top: 90px;
+  }
+  .mv-item { margin-bottom: 32px; }
+  .mv-item:last-child { margin-bottom: 0; }
+  .mv-label {
+    font-size: 11px; font-weight: 600; letter-spacing: .15em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .mv-item p { font-family: var(--serif); font-size: 17px; color: rgba(255,255,255,.85); line-height: 1.6; }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    margin-top: 56px;
+  }
+  .team-card {
+    text-align: center;
+    padding: 36px 24px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--white);
+    transition: all .2s;
+  }
+  .team-card:hover { border-color: var(--accent); box-shadow: 0 8px 32px rgba(26,79,160,.08); transform: translateY(-2px); }
+  .team-avatar {
+    width: 72px; height: 72px;
+    background: linear-gradient(135deg, var(--ink), var(--accent));
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--white);
+  }
+  .team-name { font-family: var(--serif); font-size: 20px; font-weight: 600; margin-bottom: 6px; }
+  .team-role { font-size: 13px; color: var(--mid); line-height: 1.4; }
+
+  /* ── SERVICES PAGE ── */
+  .services-detail { display:flex; flex-direction:column; gap:80px; }
+  .service-detail-item {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 64px;
+    align-items: start;
+    padding-bottom: 80px;
+    border-bottom: 1px solid var(--line);
+  }
+  .service-detail-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .service-detail-item:nth-child(even) { direction: rtl; }
+  .service-detail-item:nth-child(even) > * { direction: ltr; }
+  @media(max-width:768px){
+    .service-detail-item,
+    .service-detail-item:nth-child(even) { grid-template-columns:1fr; direction:ltr; }
+  }
+  .service-detail-left {}
+  .service-detail-label {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(26,79,160,.1), rgba(196,169,107,.1));
+    border: 1px solid rgba(26,79,160,.15);
+    color: var(--accent);
+    font-size: 12px; font-weight: 600; letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+  .service-detail-left h2 { font-family: var(--serif); font-size: 34px; font-weight: 600; line-height: 1.2; margin-bottom: 20px; }
+  .service-detail-left p { font-size: 15px; color: var(--mid); line-height: 1.75; }
+  .service-detail-right {}
+  .detail-value-box {
+    background: var(--bg);
+    border-left: 3px solid var(--gold);
+    padding: 24px 28px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 24px;
+  }
+  .detail-value-box h4 { font-family: var(--serif); font-size: 18px; font-weight: 600; margin-bottom: 10px; }
+  .detail-value-box p { font-size: 14.5px; color: var(--mid); line-height: 1.65; }
+  .use-cases-title { font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--subtle); margin-bottom: 14px; }
+  .use-cases { display:flex; flex-wrap:wrap; gap:10px; }
+  .use-case-tag {
+    font-size: 13px; color: var(--ink-2);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-weight: 500;
+  }
+
+  /* ── TRAINING ── */
+  .training-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 28px;
+    margin-top: 56px;
+  }
+  .training-card {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--white);
+    transition: all .2s;
+  }
+  .training-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,.08); transform: translateY(-2px); }
+  .training-card-header {
+    background: linear-gradient(135deg, var(--ink), var(--ink-2));
+    padding: 32px 28px;
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+  }
+  .training-card-header::before {
+    content:'';
+    position:absolute;inset:0;
+    background-image: radial-gradient(circle at 80% 20%, rgba(196,169,107,.2) 0%, transparent 60%);
+  }
+  .training-badge {
+    display: inline-block;
+    background: rgba(196,169,107,.2);
+    border: 1px solid rgba(196,169,107,.4);
+    color: var(--gold);
+    font-size: 11px; font-weight: 600; letter-spacing: .14em;
+    text-transform: uppercase;
+    padding: 5px 12px; border-radius: 100px;
+    margin-bottom: 16px;
+    position: relative; z-index:1;
+  }
+  .training-card-header h3 {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 600;
+    position: relative; z-index:1;
+  }
+  .training-card-header p { font-size: 14px; color: rgba(255,255,255,.65); margin-top: 8px; position:relative;z-index:1; }
+  .training-card-body { padding: 28px; }
+  .training-features { display:flex; flex-direction:column; gap:12px; margin-bottom:24px; }
+  .training-feature {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 14.5px; color: var(--mid);
+  }
+  .check-icon { color: var(--accent); flex-shrink:0; margin-top:2px; font-size:16px; }
+
+  /* ── CASE STUDIES ── */
+  .case-studies-grid {
+    display:flex; flex-direction:column; gap:56px;
+    margin-top: 56px;
+  }
+  .case-study-card {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 0;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  @media(max-width:768px){ .case-study-card{ grid-template-columns:1fr; } }
+  .case-study-sidebar {
+    background: linear-gradient(180deg, var(--ink) 0%, var(--ink-2) 100%);
+    padding: 40px 32px;
+    color: var(--white);
+    display: flex; flex-direction: column; justify-content: space-between;
+    min-height: 240px;
+  }
+  .case-industry {
+    font-size: 11px; font-weight: 600; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .case-study-sidebar h3 { font-family: var(--serif); font-size: 22px; font-weight: 600; line-height: 1.3; }
+  .case-outcome {
+    background: rgba(196,169,107,.15);
+    border: 1px solid rgba(196,169,107,.3);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 24px;
+    font-size: 13px;
+    color: var(--gold-light);
+  }
+  .case-outcome strong { display:block; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin-bottom:4px; }
+  .case-study-body {
+    padding: 40px;
+    background: var(--white);
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 32px;
+  }
+  @media(max-width:600px){ .case-study-body{ grid-template-columns:1fr; } }
+  .case-section-label {
+    font-size: 11px; font-weight: 600; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--subtle);
+    margin-bottom: 10px;
+  }
+  .case-section h4 { font-family: var(--serif); font-size: 18px; font-weight: 600; margin-bottom: 10px; }
+  .case-section p { font-size: 14.5px; color: var(--mid); line-height: 1.7; }
+
+  /* ── CONTACT ── */
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 5fr 4fr;
+    gap: 80px;
+    align-items: start;
+  }
+  @media(max-width:768px){ .contact-layout{ grid-template-columns:1fr; } }
+  .contact-form { display:flex; flex-direction:column; gap:20px; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  @media(max-width:500px){ .form-row{ grid-template-columns:1fr; } }
+  .form-group { display:flex; flex-direction:column; gap:7px; }
+  .form-group label { font-size: 13px; font-weight: 600; color: var(--ink-2); }
+  .form-group input, .form-group select, .form-group textarea {
+    font-family: var(--sans);
+    font-size: 15px;
+    color: var(--ink);
+    background: var(--white);
+    border: 1.5px solid var(--line);
+    border-radius: var(--r);
+    padding: 12px 16px;
+    transition: border-color .15s;
+    outline: none;
+    resize: vertical;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(26,79,160,.08);
+  }
+  .contact-aside {
+    background: var(--ink);
+    border-radius: 16px;
+    padding: 40px 36px;
+    color: var(--white);
+    position: sticky;
+    top: 90px;
+  }
+  .contact-item { margin-bottom: 28px; display:flex; gap:14px; align-items:flex-start; }
+  .contact-item-icon {
+    width: 38px; height: 38px; flex-shrink:0;
+    background: rgba(255,255,255,.07);
+    border-radius: 8px;
+    display: flex; align-items:center; justify-content:center;
+  }
+  .contact-item-icon svg { width:16px; height:16px; stroke:var(--gold); fill:none; stroke-width:2; }
+  .contact-item-label { font-size:12px; text-transform:uppercase; letter-spacing:.12em; color:var(--subtle); margin-bottom:4px; }
+  .contact-item-val { font-size:15px; color:var(--white); font-weight:500; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    border-top: 1px solid rgba(255,255,255,.06);
+    color: rgba(255,255,255,.5);
+  }
+  .footer-main {
+    padding: 64px 0;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+  }
+  @media(max-width:900px){ .footer-main{ grid-template-columns:1fr 1fr; } }
+  @media(max-width:500px){ .footer-main{ grid-template-columns:1fr; } }
+  .footer-brand-name {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 12px;
+  }
+  .footer-tagline { font-size: 14px; line-height: 1.7; max-width: 240px; }
+  .footer-col-title { font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.7); margin-bottom: 18px; }
+  .footer-col a { display:block; font-size: 14px; color: rgba(255,255,255,.45); margin-bottom: 10px; transition: color .15s; }
+  .footer-col a:hover { color: var(--white); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,.06);
+    padding: 20px 0;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px;
+    flex-wrap: wrap; gap: 12px;
+  }
+
+  /* ── PAGE VISIBILITY ── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── SECTION HEADINGS ── */
+  .section-header { max-width: 600px; margin-bottom: 56px; }
+  .section-header h2 { font-family: var(--serif); font-size: clamp(30px, 4vw, 46px); font-weight: 600; line-height: 1.2; margin-bottom: 16px; }
+  .section-header p { font-size: 16px; color: var(--mid); line-height: 1.7; }
+  .section-header-center { text-align: center; margin-left: auto; margin-right: auto; }
+
+  /* ── TOOLS GRID ── */
+  .tools-section { padding: 72px 0; background: var(--ink); }
+  .tools-grid {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    margin-top: 40px;
+  }
+  .tool-chip {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 8px;
+    padding: 12px 20px;
+    color: rgba(255,255,255,.85);
+    font-size: 14px; font-weight: 500;
+    transition: all .2s;
+  }
+  .tool-chip:hover { background: rgba(255,255,255,.1); border-color: rgba(196,169,107,.4); color: var(--white); }
+  .tool-chip-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+
+  /* ── SCROLL TOP ── */
+  .scroll-top {
+    position: fixed; bottom: 32px; right: 32px;
+    width: 44px; height: 44px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    z-index: 200;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all .25s;
+    border: none;
+  }
+  .scroll-top.show { opacity: 1; transform: translateY(0); }
+  .scroll-top svg { width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="container nav-inner">
+    <div class="nav-logo">
+      <div class="nav-logo-mark">
+        <svg viewBox="0 0 24 24"><path d="M3 12l4-4 4 4 4-8 4 8"/><circle cx="19" cy="5" r="2"/></svg>
+      </div>
+      <span class="nav-brand">DataWise Labs</span>
+    </div>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#" onclick="showPage('home')" class="active" id="nav-home">Home</a></li>
+      <li><a href="#" onclick="showPage('about')" id="nav-about">About</a></li>
+      <li><a href="#" onclick="showPage('services')" id="nav-services">Services</a></li>
+      <li><a href="#" onclick="showPage('training')" id="nav-training">Training</a></li>
+      <li><a href="#" onclick="showPage('cases')" id="nav-cases">Case Studies</a></li>
+      <li><a href="#" onclick="showPage('contact')" class="nav-cta" id="nav-contact">Contact</a></li>
+    </ul>
+    <div class="hamburger" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════ HOME ══════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- Hero -->
+  <section id="home">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <span class="hero-eyebrow-dot"></span>
+          Engineering Intelligence from Data
+        </div>
+        <h1 class="hero-h1">Transform Data<br/>into <em>Decisions</em></h1>
+        <p class="hero-sub">We help organizations build data systems, dashboards, and analytics solutions that drive better decisions — faster and with confidence.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" onclick="showPage('contact')">Book a Consultation →</a>
+          <a class="btn btn-outline" onclick="showPage('services')">View Services</a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <div class="stat-val">5+</div>
+            <div class="stat-label">Industry verticals covered</div>
+          </div>
+          <div>
+            <div class="stat-val">5</div>
+            <div class="stat-label">Specialist co-founders</div>
+          </div>
+          <div>
+            <div class="stat-val">8+</div>
+            <div class="stat-label">Years combined experience</div>
+          </div>
+          <div>
+            <div class="stat-val">10+</div>
+            <div class="stat-label">Tools &amp; platforms mastered</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Overview -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="tag">What We Do</span>
+        <h2 class="serif-heading">End-to-end data capabilities</h2>
+        <p>From raw data pipelines to executive dashboards — we cover every layer of your data journey.</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          </div>
+          <h3>Data Engineering</h3>
+          <p>Build reliable pipelines and infrastructure that move, transform, and store data where you need it.</p>
+          <span class="service-link" onclick="showPage('services')">Learn more →</span>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 17h7m-3.5-3.5v7"/></svg>
+          </div>
+          <h3>Business Intelligence</h3>
+          <p>Turn your data into interactive dashboards and reports using Power BI and Tableau.</p>
+          <span class="service-link" onclick="showPage('services')">Learn more →</span>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>
+          </div>
+          <h3>Data Integration</h3>
+          <p>Connect siloed systems and automate data flows across your entire business ecosystem.</p>
+          <span class="service-link" onclick="showPage('services')">Learn more →</span>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+          <h3>Analytics & Decisions</h3>
+          <p>Design analytics frameworks that surface the right insights to the right people at the right time.</p>
+          <span class="service-link" onclick="showPage('services')">Learn more →</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Us -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="why-layout">
+        <div class="why-visual">
+          <div class="why-number">∞</div>
+          <div class="why-visual-content">
+            <span class="tag">Team Expertise</span>
+            <div class="why-metric">
+              <div class="why-metric-val">8+</div>
+              <div class="why-metric-text">Combined years of hands-on industry and technical experience</div>
+            </div>
+            <div class="why-metric">
+              <div class="why-metric-val">6</div>
+              <div class="why-metric-text">Industries worked in — Retail, Manufacturing, Insurance, FMCG, IT &amp; Healthcare</div>
+            </div>
+            <div class="why-metric">
+              <div class="why-metric-val">10+</div>
+              <div class="why-metric-text">Tools mastered — Power BI, Tableau, Python, SQL, Azure, Spark &amp; more</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <span class="tag">Why DataWise Labs</span>
+          <div class="divider"></div>
+          <h2 class="serif-heading" style="font-size:clamp(28px,3.5vw,42px);margin-bottom:12px;">Built for businesses that need results, not proposals</h2>
+          <p style="color:var(--mid);font-size:15.5px;line-height:1.75;margin-bottom:0;">We combine deep technical expertise with a consulting mindset — we don't just build systems, we solve the business problem behind them.</p>
+          <div class="why-points">
+            <div class="why-point">
+              <div class="why-point-num">1</div>
+              <div>
+                <h4>Outcome-first approach</h4>
+                <p>Every engagement starts with the business question, not the technology. We work backwards from the decision you need to make.</p>
+              </div>
+            </div>
+            <div class="why-point">
+              <div class="why-point-num">2</div>
+              <div>
+                <h4>Full-stack data team</h4>
+                <p>From ingestion to visualization, our team covers every layer — no need to manage multiple vendors.</p>
+              </div>
+            </div>
+            <div class="why-point">
+              <div class="why-point-num">3</div>
+              <div>
+                <h4>SMB-ready delivery</h4>
+                <p>Scalable solutions sized for mid-market companies — without enterprise complexity or cost.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Industries -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header section-header-center" style="margin:0 auto 56px;">
+        <span class="tag">Industries We Serve</span>
+        <h2 class="serif-heading">Sector-specific data expertise</h2>
+        <p>We understand the data challenges unique to your industry — not just the technology.</p>
+      </div>
+      <div class="industries-grid">
+        <div class="industry-card">
+          <div class="industry-icon">🛒</div>
+          <h3>Retail</h3>
+          <p>Sales analytics, inventory optimization, customer segmentation, and store performance dashboards.</p>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon">🏭</div>
+          <h3>Manufacturing</h3>
+          <p>OEE dashboards, production analytics, quality control monitoring, and supply chain visibility.</p>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon">🛡️</div>
+          <h3>Insurance</h3>
+          <p>Claims analytics, risk modeling, policy performance reporting, and regulatory compliance data.</p>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon">📦</div>
+          <h3>CPG</h3>
+          <p>Trade promotion analytics, demand forecasting, distributor data management, and SKU performance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tools & Technologies -->
+  <div class="tools-section">
+    <div class="container">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+        <div>
+          <span class="tag">Our Stack</span>
+          <h2 class="serif-heading" style="color:white;font-size:clamp(26px,3vw,38px);max-width:480px;margin-top:8px;">Tools &amp; platforms our team works with every day</h2>
+        </div>
+        <p style="color:rgba(255,255,255,.5);font-size:14.5px;max-width:300px;line-height:1.7;">Not generalists. Every founder on our team has deep, hands-on expertise in the tools we deploy.</p>
+      </div>
+      <div class="tools-grid">
+        <div class="tool-chip"><span class="tool-chip-dot" style="background:#F2C94C;"></span>Power BI</div>
+        <div class="tool-chip"><span class="tool-chip-dot" style="background:#E8762D;"></span>Tableau</div>
+        <div class="tool-chip"><span class="tool-chip-dot" style="background:#3776AB;"></span>Python / Pandas</div>
+        <div class="tool-chip"><span class="tool-chip-dot" style="background:#CC2927;"></span>SQL / T-SQL</div>
+        <div class="tool-chip"><span class="tool-chip-dot" style="background:#0078D4;"></span>Microsoft Azure</div>
+        <div class="tool-chip"><span class="tool-chip-dot" style="background:#FF9900;"></span>AWS</div>
+        <div class="tool-chip"><span class="tool-chip-dot" style="background:#E25A1C;"></span>Apache Spark</div>
+        <div class="tool-chip"><span class="tool-chip-dot" style="background:#FF3621;"></span>Databricks</div>
+        <div class="tool-chip"><span class="tool-chip-dot" style="background:#29ABE2;"></span>Data Warehousing</div>
+        <div class="tool-chip"><span class="tool-chip-dot" style="background:#C4A96B;"></span>ETL / ELT Pipelines</div>
+        <div class="tool-chip"><span class="tool-chip-dot" style="background:#68C5F0;"></span>REST APIs &amp; Integration</div>
+        <div class="tool-chip"><span class="tool-chip-dot" style="background:#7FBA00;"></span>Excel / Power Query</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Early Adopter CTA (replaces testimonials until first clients) -->
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-header section-header-center" style="margin:0 auto 56px;">
+        <span class="tag">Early Access</span>
+        <h2 class="serif-heading" style="color:white;">Be among our first clients</h2>
+        <p style="color:rgba(255,255,255,.6);">We're actively taking on our first engagements. Early clients get our full attention, founder-level involvement, and preferential pricing.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;">
+        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:36px 32px;">
+          <div style="font-size:32px;margin-bottom:16px;">🎯</div>
+          <h3 style="font-family:var(--serif);font-size:20px;color:white;margin-bottom:10px;">Founder-led delivery</h3>
+          <p style="font-size:14.5px;color:rgba(255,255,255,.6);line-height:1.65;">Every early project is handled directly by a co-founder — not delegated to junior staff. You get our best work and full accountability.</p>
+        </div>
+        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:36px 32px;">
+          <div style="font-size:32px;margin-bottom:16px;">💡</div>
+          <h3 style="font-family:var(--serif);font-size:20px;color:white;margin-bottom:10px;">Free discovery session</h3>
+          <p style="font-size:14.5px;color:rgba(255,255,255,.6);line-height:1.65;">We'll spend 30 minutes understanding your data challenges and give you a clear view of what's possible — with no commitment required.</p>
+        </div>
+        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:36px 32px;">
+          <div style="font-size:32px;margin-bottom:16px;">🤝</div>
+          <h3 style="font-family:var(--serif);font-size:20px;color:white;margin-bottom:10px;">Preferential early pricing</h3>
+          <p style="font-size:14.5px;color:rgba(255,255,255,.6);line-height:1.65;">Our first few clients benefit from introductory rates as we build our portfolio together. Quality stays the same — pricing reflects our growth stage.</p>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:48px;">
+        <a class="btn btn-primary" onclick="showPage('contact')" style="padding:16px 36px;font-size:15px;">Book Your Free Discovery Call →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Band -->
+  <div class="cta-band">
+    <div class="container">
+      <h2>Ready to build your data foundation?</h2>
+      <p>Book a free 30-minute consultation and we'll map out exactly what your business needs.</p>
+      <div class="btn-group">
+        <a class="btn btn-outline" onclick="showPage('contact')" style="border-color:rgba(255,255,255,.5);color:#fff;">Book a Free Consultation →</a>
+        <a class="btn" onclick="showPage('cases')" style="background:rgba(255,255,255,.1);color:#fff;">See Case Studies</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════ ABOUT ══════════════ -->
+<div id="page-about" class="page" style="padding-top:70px;">
+
+  <section class="section">
+    <div class="container">
+      <span class="tag">About Us</span>
+      <div class="divider"></div>
+      <h1 class="serif-heading" style="font-size:clamp(36px,5vw,60px);max-width:700px;margin-bottom:64px;">A consulting firm built by practitioners</h1>
+      <div class="about-story">
+        <div class="story-text">
+          <h2 class="serif-heading" style="font-size:28px;margin-bottom:28px;">Our Story</h2>
+          <p>DataWise Labs was founded by a group of data professionals who spent years on both sides of the table — as in-house data teams and as consultants — and kept seeing the same problem: organizations were drowning in data but starving for insight.</p>
+          <p>Every company had spreadsheets, ERP exports, and CRM reports — but no coherent system to connect the dots. Decisions were still being made on gut feel, because the data was either unavailable, unreliable, or incomprehensible to non-technical stakeholders.</p>
+          <p>We set out to change that. DataWise Labs was built on a simple belief: <strong>good data systems should make people smarter, not busier</strong>. Every project we take on starts with the question — what decision does this data need to support?</p>
+          <p>Today, we partner with small and mid-sized businesses across retail, manufacturing, insurance, and CPG to build the data infrastructure, dashboards, and analytics capabilities that make that possible. Our team brings together deep technical skills in data engineering, BI, and cloud platforms with a consulting discipline that keeps every solution anchored to business value.</p>
+          <p>We're not a software vendor. We're not a staffing agency. We're a focused team of data professionals who take genuine ownership of the problem — and stay accountable to the outcome.</p>
+        </div>
+        <div>
+          <div class="about-aside">
+            <div class="mv-item">
+              <div class="mv-label">Our Mission</div>
+              <p>To make data-driven decision-making accessible and actionable for every growing business — not just the enterprise.</p>
+            </div>
+            <div class="mv-item">
+              <div class="mv-label">Combined Experience</div>
+              <p style="font-family:var(--sans);font-size:14px;color:rgba(255,255,255,.7);line-height:1.7;">8+ years across Retail, Manufacturing, Insurance, FMCG, IT, and Healthcare — the team has seen the data problems of multiple industries from the inside.</p>
+            </div>
+            <div class="mv-item" style="margin-bottom:0;">
+              <div class="mv-label">Core Technologies</div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
+                <span style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:5px 12px;font-size:12px;color:rgba(255,255,255,.75);">Power BI</span>
+                <span style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:5px 12px;font-size:12px;color:rgba(255,255,255,.75);">Tableau</span>
+                <span style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:5px 12px;font-size:12px;color:rgba(255,255,255,.75);">Python</span>
+                <span style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:5px 12px;font-size:12px;color:rgba(255,255,255,.75);">SQL</span>
+                <span style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:5px 12px;font-size:12px;color:rgba(255,255,255,.75);">Azure / AWS</span>
+                <span style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:5px 12px;font-size:12px;color:rgba(255,255,255,.75);">Spark</span>
+                <span style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:5px 12px;font-size:12px;color:rgba(255,255,255,.75);">Databricks</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <span class="tag">Leadership</span>
+      <div class="divider"></div>
+      <h2 class="serif-heading" style="font-size:clamp(28px,4vw,44px);margin-bottom:16px;">The founding team</h2>
+      <p style="color:var(--mid);max-width:520px;line-height:1.7;">Five specialists who together cover every dimension of modern data and analytics.</p>
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-avatar">DS</div>
+          <div class="team-name">Dhruv Shah</div>
+          <div class="team-role">CEO &amp; Co-founder</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">SS</div>
+          <div class="team-name">Sachin Sharma</div>
+          <div class="team-role">Head of Business Intelligence</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">RS</div>
+          <div class="team-name">Rakesh Sahare</div>
+          <div class="team-role">Head of Software Development</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">KL</div>
+          <div class="team-name">Kiran Lohar</div>
+          <div class="team-role">Head of Data Engineering</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">DT</div>
+          <div class="team-name">Dattatraya Shinde</div>
+          <div class="team-role">Head of Data Integration</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-band">
+    <div class="container">
+      <h2>Let's talk about your data challenges</h2>
+      <p>Book a free introductory call with our team — no commitment, just a conversation.</p>
+      <div class="btn-group">
+        <a class="btn btn-outline" onclick="showPage('contact')" style="border-color:rgba(255,255,255,.5);color:#fff;">Book a Consultation →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SERVICES ══════════════ -->
+<div id="page-services" class="page" style="padding-top:70px;">
+
+  <section class="section">
+    <div class="container">
+      <span class="tag">Our Services</span>
+      <div class="divider"></div>
+      <h1 class="serif-heading" style="font-size:clamp(36px,5vw,60px);max-width:700px;margin-bottom:16px;">What we build, and why it matters</h1>
+      <p style="color:var(--mid);max-width:560px;font-size:16px;line-height:1.75;margin-bottom:80px;">Our services are structured around the full data value chain — from infrastructure to insight.</p>
+
+      <div class="services-detail">
+
+        <!-- Data Engineering -->
+        <div class="service-detail-item">
+          <div class="service-detail-left">
+            <div class="service-detail-label">Service 01</div>
+            <h2>Data Engineering &amp; Pipelines</h2>
+            <p>We design and build the data infrastructure that makes everything else possible. From ETL/ELT pipelines to cloud data warehouses, we ensure your data is where you need it — clean, reliable, and on time.</p>
+          </div>
+          <div class="service-detail-right">
+            <div class="detail-value-box">
+              <h4>Business Value</h4>
+              <p>Stop losing time to broken exports and stale spreadsheets. With a well-engineered data layer, your teams work from a single source of truth — always current, always trustworthy.</p>
+            </div>
+            <div class="use-cases-title">Example Use Cases</div>
+            <div class="use-cases">
+              <span class="use-case-tag">ERP to data warehouse sync</span>
+              <span class="use-case-tag">Multi-source data consolidation</span>
+              <span class="use-case-tag">Cloud migration (AWS / Azure)</span>
+              <span class="use-case-tag">Automated daily data refresh</span>
+              <span class="use-case-tag">Data quality monitoring</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BI -->
+        <div class="service-detail-item">
+          <div class="service-detail-left">
+            <div class="service-detail-label">Service 02</div>
+            <h2>Business Intelligence &amp; Dashboards</h2>
+            <p>We build dashboards and reports that decision-makers actually use. Whether it's Power BI or Tableau, we design for clarity and business logic — not just visual aesthetics.</p>
+          </div>
+          <div class="service-detail-right">
+            <div class="detail-value-box">
+              <h4>Business Value</h4>
+              <p>Replace weekly report meetings and manual PowerPoints with live dashboards. Empower your sales, ops, and finance teams to self-serve the insights they need in real time.</p>
+            </div>
+            <div class="use-cases-title">Example Use Cases</div>
+            <div class="use-cases">
+              <span class="use-case-tag">Executive KPI dashboards</span>
+              <span class="use-case-tag">Sales performance reporting</span>
+              <span class="use-case-tag">Operations &amp; OEE monitoring</span>
+              <span class="use-case-tag">Financial consolidation reports</span>
+              <span class="use-case-tag">Self-service analytics portals</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Integration -->
+        <div class="service-detail-item">
+          <div class="service-detail-left">
+            <div class="service-detail-label">Service 03</div>
+            <h2>Data Integration &amp; Automation</h2>
+            <p>We connect your systems and automate the data flows between them — eliminating manual handoffs, reducing errors, and freeing up your team for higher-value work.</p>
+          </div>
+          <div class="service-detail-right">
+            <div class="detail-value-box">
+              <h4>Business Value</h4>
+              <p>Every hour spent manually moving data between systems is an hour not spent on strategy. Integration unlocks operational efficiency that compounds over time.</p>
+            </div>
+            <div class="use-cases-title">Example Use Cases</div>
+            <div class="use-cases">
+              <span class="use-case-tag">CRM ↔ ERP integration</span>
+              <span class="use-case-tag">API-based data feeds</span>
+              <span class="use-case-tag">Automated reconciliation</span>
+              <span class="use-case-tag">Third-party data ingestion</span>
+              <span class="use-case-tag">Workflow automation</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Analytics -->
+        <div class="service-detail-item">
+          <div class="service-detail-left">
+            <div class="service-detail-label">Service 04</div>
+            <h2>Analytics &amp; Decision Systems</h2>
+            <p>We design analytics frameworks — metrics hierarchies, KPI definitions, decision trees — that give your leadership team a structured way to interpret data and act on it.</p>
+          </div>
+          <div class="service-detail-right">
+            <div class="detail-value-box">
+              <h4>Business Value</h4>
+              <p>Data without a decision framework is noise. We help you define what to measure, how to interpret it, and what to do when numbers move — so that insight becomes action.</p>
+            </div>
+            <div class="use-cases-title">Example Use Cases</div>
+            <div class="use-cases">
+              <span class="use-case-tag">KPI framework design</span>
+              <span class="use-case-tag">Cohort &amp; retention analysis</span>
+              <span class="use-case-tag">Pricing &amp; margin analytics</span>
+              <span class="use-case-tag">Demand forecasting</span>
+              <span class="use-case-tag">Customer segmentation</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-band">
+    <div class="container">
+      <h2>Not sure which service fits your need?</h2>
+      <p>Book a free discovery call and we'll diagnose your data situation together.</p>
+      <div class="btn-group">
+        <a class="btn btn-outline" onclick="showPage('contact')" style="border-color:rgba(255,255,255,.5);color:#fff;">Talk to Our Team →</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════ TRAINING ══════════════ -->
+<div id="page-training" class="page" style="padding-top:70px;">
+
+  <section class="section">
+    <div class="container">
+      <span class="tag">Training Programs</span>
+      <div class="divider"></div>
+      <h1 class="serif-heading" style="font-size:clamp(36px,5vw,60px);max-width:680px;margin-bottom:16px;">Practical data skills for real-world roles</h1>
+      <p style="color:var(--mid);max-width:560px;font-size:16px;line-height:1.75;margin-bottom:24px;">Our training programs are built for professionals and teams who need to upskill quickly — with hands-on projects drawn from real industry scenarios.</p>
+      <div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:64px;">
+        <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--mid);">
+          <span style="color:var(--accent);font-size:18px;">✓</span> Practical, project-based learning
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--mid);">
+          <span style="color:var(--accent);font-size:18px;">✓</span> Industry-focused curriculum
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--mid);">
+          <span style="color:var(--accent);font-size:18px;">✓</span> Taught by active practitioners
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--mid);">
+          <span style="color:var(--accent);font-size:18px;">✓</span> Corporate batch options available
+        </div>
+      </div>
+
+      <div class="training-grid">
+
+        <!-- Power BI -->
+        <div class="training-card">
+          <div class="training-card-header">
+            <div class="training-badge">Bootcamp</div>
+            <h3>Power BI Bootcamp</h3>
+            <p>From zero to production-ready dashboards</p>
+          </div>
+          <div class="training-card-body">
+            <div class="training-features">
+              <div class="training-feature"><span class="check-icon">→</span>Data modelling and relationships in Power BI</div>
+              <div class="training-feature"><span class="check-icon">→</span>DAX measures for business KPIs</div>
+              <div class="training-feature"><span class="check-icon">→</span>Dashboard design for non-technical audiences</div>
+              <div class="training-feature"><span class="check-icon">→</span>Publishing, sharing, and row-level security</div>
+              <div class="training-feature"><span class="check-icon">→</span>Capstone project: Build a real sales dashboard</div>
+            </div>
+            <a class="btn btn-outline-dark" onclick="showPage('contact')" style="width:100%;justify-content:center;">Enquire →</a>
+          </div>
+        </div>
+
+        <!-- SQL -->
+        <div class="training-card">
+          <div class="training-card-header" style="background:linear-gradient(135deg,#1A4FA0,#0E3A7A);">
+            <div class="training-badge">Fundamentals</div>
+            <h3>SQL for Data Analysts</h3>
+            <p>Query confidently, interpret accurately</p>
+          </div>
+          <div class="training-card-body">
+            <div class="training-features">
+              <div class="training-feature"><span class="check-icon">→</span>SELECT, JOIN, GROUP BY, window functions</div>
+              <div class="training-feature"><span class="check-icon">→</span>Writing analytical queries for business questions</div>
+              <div class="training-feature"><span class="check-icon">→</span>Working with real-world messy datasets</div>
+              <div class="training-feature"><span class="check-icon">→</span>SQL for reporting and BI tool connectivity</div>
+              <div class="training-feature"><span class="check-icon">→</span>Capstone project: Sales &amp; operations analysis</div>
+            </div>
+            <a class="btn btn-outline-dark" onclick="showPage('contact')" style="width:100%;justify-content:center;">Enquire →</a>
+          </div>
+        </div>
+
+        <!-- Python -->
+        <div class="training-card">
+          <div class="training-card-header" style="background:linear-gradient(135deg,#1D2E4F,#2C4273);">
+            <div class="training-badge">Applied</div>
+            <h3>Python for Data Analysis</h3>
+            <p>Automate, analyse, and visualise with Python</p>
+          </div>
+          <div class="training-card-body">
+            <div class="training-features">
+              <div class="training-feature"><span class="check-icon">→</span>Pandas for data manipulation and cleaning</div>
+              <div class="training-feature"><span class="check-icon">→</span>Data visualisation with Matplotlib &amp; Seaborn</div>
+              <div class="training-feature"><span class="check-icon">→</span>Automating Excel and CSV workflows</div>
+              <div class="training-feature"><span class="check-icon">→</span>Exploratory data analysis techniques</div>
+              <div class="training-feature"><span class="check-icon">→</span>Capstone: End-to-end analysis project</div>
+            </div>
+            <a class="btn btn-outline-dark" onclick="showPage('contact')" style="width:100%;justify-content:center;">Enquire →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Corporate Training -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="why-layout">
+        <div>
+          <span class="tag">Corporate Training</span>
+          <div class="divider"></div>
+          <h2 class="serif-heading" style="font-size:clamp(28px,3.5vw,42px);margin-bottom:20px;">Upskill your entire team</h2>
+          <p style="color:var(--mid);font-size:15.5px;line-height:1.75;margin-bottom:32px;">We offer customised corporate training programs for teams of 5 to 50+. All programs can be tailored to your industry, your data tools, and your team's current skill level.</p>
+          <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:40px;">
+            <div style="display:flex;align-items:center;gap:12px;font-size:15px;color:var(--ink-2);">
+              <span style="color:var(--gold);font-size:20px;">✓</span> Custom curriculum built around your tools and datasets
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;font-size:15px;color:var(--ink-2);">
+              <span style="color:var(--gold);font-size:20px;">✓</span> On-site, remote, or hybrid delivery
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;font-size:15px;color:var(--ink-2);">
+              <span style="color:var(--gold);font-size:20px;">✓</span> Pre and post-training assessment
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;font-size:15px;color:var(--ink-2);">
+              <span style="color:var(--gold);font-size:20px;">✓</span> Certificate of completion for participants
+            </div>
+          </div>
+          <a class="btn btn-primary" onclick="showPage('contact')">Enquire about Corporate Training →</a>
+        </div>
+        <div class="why-visual">
+          <div class="why-visual-content">
+            <span class="tag">Program Format</span>
+            <div class="why-metric">
+              <div class="why-metric-val">4–8</div>
+              <div class="why-metric-text">Weeks per program, depending on depth and topic</div>
+            </div>
+            <div class="why-metric">
+              <div class="why-metric-val">100%</div>
+              <div class="why-metric-text">Project-based — real datasets, real business problems</div>
+            </div>
+            <div class="why-metric">
+              <div class="why-metric-val">Live</div>
+              <div class="why-metric-text">Instructor-led sessions with Q&amp;A and mentoring</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ══════════════ CASE STUDIES ══════════════ -->
+<div id="page-cases" class="page" style="padding-top:70px;">
+
+  <section class="section">
+    <div class="container">
+      <span class="tag">Case Studies</span>
+      <div class="divider"></div>
+      <h1 class="serif-heading" style="font-size:clamp(36px,5vw,60px);max-width:680px;margin-bottom:16px;">Work that moved the needle</h1>
+      <p style="color:var(--mid);max-width:540px;font-size:16px;line-height:1.75;margin-bottom:80px;">Three examples of how we've helped companies turn raw data into decisions that drove real business outcomes.</p>
+
+      <div class="case-studies-grid">
+
+        <!-- Case 1 -->
+        <div class="case-study-card">
+          <div class="case-study-sidebar">
+            <div>
+              <div class="case-industry">Retail</div>
+              <h3>Sales Performance Dashboard</h3>
+            </div>
+            <div class="case-outcome">
+              <strong>Key Outcome</strong>
+              40% reduction in time spent generating weekly reports
+            </div>
+          </div>
+          <div class="case-study-body">
+            <div class="case-section">
+              <div class="case-section-label">The Problem</div>
+              <h4>Fragmented sales data across 12 stores</h4>
+              <p>A mid-sized retail chain had store-level data spread across multiple POS systems and Excel files. Weekly sales reports took two days to compile and were always at least 48 hours stale by the time leadership saw them.</p>
+            </div>
+            <div class="case-section">
+              <div class="case-section-label">Our Solution</div>
+              <h4>Unified data pipeline + Power BI dashboard</h4>
+              <p>We built an automated ETL pipeline that consolidated all store-level POS data into a central data warehouse. On top of that, we designed a live Power BI dashboard with store-level, regional, and product-category views.</p>
+            </div>
+            <div class="case-section">
+              <div class="case-section-label">The Outcome</div>
+              <h4>Real-time visibility, faster decisions</h4>
+              <p>Leadership now had a live dashboard refreshed every 2 hours. Weekly report generation dropped from 2 days to zero. The team identified a 15% sales uplift opportunity in a previously invisible product category within the first month.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Case 2 -->
+        <div class="case-study-card">
+          <div class="case-study-sidebar">
+            <div>
+              <div class="case-industry">Manufacturing</div>
+              <h3>Production &amp; OEE Analytics</h3>
+            </div>
+            <div class="case-outcome">
+              <strong>Key Outcome</strong>
+              12% improvement in Overall Equipment Effectiveness
+            </div>
+          </div>
+          <div class="case-study-body">
+            <div class="case-section">
+              <div class="case-section-label">The Problem</div>
+              <h4>No visibility into machine downtime causes</h4>
+              <p>A component manufacturer was losing significant production time to unplanned downtime but had no systematic way to track causes, duration, or impact by shift, machine, or product line.</p>
+            </div>
+            <div class="case-section">
+              <div class="case-section-label">Our Solution</div>
+              <h4>MES data integration + OEE tracking system</h4>
+              <p>We integrated data from their Manufacturing Execution System and floor-level logs into a structured analytics database. We then built shift-level OEE dashboards and a downtime cause classification system to surface patterns.</p>
+            </div>
+            <div class="case-section">
+              <div class="case-section-label">The Outcome</div>
+              <h4>Data-driven maintenance decisions</h4>
+              <p>Within three months, the operations team identified three recurring failure modes responsible for 70% of unplanned downtime. Targeted maintenance schedules improved OEE by 12%, recovering over 300 production hours per quarter.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Case 3 -->
+        <div class="case-study-card">
+          <div class="case-study-sidebar">
+            <div>
+              <div class="case-industry">Insurance</div>
+              <h3>Claims Analytics Platform</h3>
+            </div>
+            <div class="case-outcome">
+              <strong>Key Outcome</strong>
+              30% faster claims trend identification
+            </div>
+          </div>
+          <div class="case-study-body">
+            <div class="case-section">
+              <div class="case-section-label">The Problem</div>
+              <h4>Claims data locked in legacy systems</h4>
+              <p>A regional insurance firm was unable to detect early warning signals in claims trends because data lived in a legacy system with no reporting capability. Actuarial analyses were done quarterly, too slow to inform pricing decisions.</p>
+            </div>
+            <div class="case-section">
+              <div class="case-section-label">Our Solution</div>
+              <h4>Data extraction + analytics dashboard</h4>
+              <p>We built a secure data extraction process from their legacy claims system into a modern data warehouse. On top of it, we designed a claims analytics dashboard covering frequency, severity, product line, and geography — updated monthly.</p>
+            </div>
+            <div class="case-section">
+              <div class="case-section-label">The Outcome</div>
+              <h4>Faster, more confident underwriting</h4>
+              <p>The actuarial and underwriting teams could now see claims trends monthly instead of quarterly. The firm identified a deteriorating claims pattern in one product segment four months earlier than they would have previously, enabling a proactive pricing correction.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-band">
+    <div class="container">
+      <h2>Could your business be our next case study?</h2>
+      <p>Let's talk about your data challenges and what results we can help you achieve.</p>
+      <div class="btn-group">
+        <a class="btn btn-outline" onclick="showPage('contact')" style="border-color:rgba(255,255,255,.5);color:#fff;">Book a Free Consultation →</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════ CONTACT ══════════════ -->
+<div id="page-contact" class="page" style="padding-top:70px;">
+
+  <section class="section">
+    <div class="container">
+      <span class="tag">Contact</span>
+      <div class="divider"></div>
+      <h1 class="serif-heading" style="font-size:clamp(36px,5vw,56px);max-width:620px;margin-bottom:16px;">Book a free consultation</h1>
+      <p style="color:var(--mid);max-width:500px;font-size:16px;line-height:1.75;margin-bottom:64px;">Tell us about your data challenges. We'll respond within one business day and suggest a 30-minute introductory call — no commitment required.</p>
+
+      <div class="contact-layout">
+        <form class="contact-form" onsubmit="handleSubmit(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name</label>
+              <input type="text" placeholder="Rahul" required />
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input type="text" placeholder="Sharma" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Business Email</label>
+            <input type="email" placeholder="you@yourcompany.com" required />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Company</label>
+              <input type="text" placeholder="Your Company" />
+            </div>
+            <div class="form-group">
+              <label>Your Role</label>
+              <input type="text" placeholder="e.g. Head of Operations" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>What are you looking for?</label>
+            <select>
+              <option value="" disabled selected>Select a service</option>
+              <option>Data Engineering &amp; Pipelines</option>
+              <option>Business Intelligence &amp; Dashboards</option>
+              <option>Data Integration &amp; Automation</option>
+              <option>Analytics &amp; Decision Systems</option>
+              <option>Training Programs</option>
+              <option>Not sure — need advice</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Tell us about your challenge</label>
+            <textarea rows="5" placeholder="What data problem are you trying to solve? What does success look like for you?"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:16px;">Send Message →</button>
+          <p style="font-size:13px;color:var(--subtle);margin-top:4px;">We'll get back to you within 1 business day.</p>
+        </form>
+
+        <div>
+          <div class="contact-aside">
+            <h3 class="serif-heading" style="font-size:22px;color:white;margin-bottom:28px;">Get in touch</h3>
+            <div class="contact-item">
+              <div class="contact-item-icon">
+                <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <div>
+                <div class="contact-item-label">Email</div>
+                <div class="contact-item-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="234b464f4f4c6347425742544a50464f4241500d4a4d">[email&#160;protected]</a></div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon">
+                <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6.09 6.09l.92-.92a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.72 16.92z"/></svg>
+              </div>
+              <div>
+                <div class="contact-item-label">Phone / WhatsApp</div>
+                <div class="contact-item-val">+91 00000 00000</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon">
+                <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <div class="contact-item-label">Location</div>
+                <div class="contact-item-val">India · Available globally</div>
+              </div>
+            </div>
+            <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:28px;margin-top:4px;">
+              <div class="mv-label" style="margin-bottom:12px;">Typical response time</div>
+              <p style="font-size:15px;color:rgba(255,255,255,.75);line-height:1.6;">We respond to all enquiries within <strong style="color:var(--gold);">1 business day</strong>. Consultations are free with no obligation.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer id="main-footer">
+  <div class="container footer-main">
+    <div>
+      <div class="footer-brand-name">DataWise Labs</div>
+      <div class="footer-tagline">Engineering Intelligence from Data. Helping businesses make better decisions through reliable data systems and analytics.</div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Services</div>
+      <a href="#" onclick="showPage('services')">Data Engineering</a>
+      <a href="#" onclick="showPage('services')">Business Intelligence</a>
+      <a href="#" onclick="showPage('services')">Data Integration</a>
+      <a href="#" onclick="showPage('services')">Analytics Systems</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Company</div>
+      <a href="#" onclick="showPage('about')">About Us</a>
+      <a href="#" onclick="showPage('cases')">Case Studies</a>
+      <a href="#" onclick="showPage('training')">Training</a>
+      <a href="#" onclick="showPage('contact')">Contact</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Industries</div>
+      <a href="#">Retail</a>
+      <a href="#">Manufacturing</a>
+      <a href="#">Insurance</a>
+      <a href="#">CPG</a>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© 2025 DataWise Labs. All rights reserved.</span>
+    <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9af2fff6f6f5dafefbeefbedf3e9fff6fbf8e9b4f3f4">[email&#160;protected]</a></span>
+  </div>
+</footer>
+
+<!-- Scroll to top -->
+<button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // Page routing
+  const pages = ['home','about','services','training','cases','contact'];
+
+  function showPage(id) {
+    pages.forEach(p => {
+      document.getElementById('page-'+p).classList.toggle('active', p === id);
+      const nav = document.getElementById('nav-'+p);
+      if(nav) nav.classList.toggle('active', p === id);
